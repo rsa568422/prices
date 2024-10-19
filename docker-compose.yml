@@ -1,0 +1,11 @@
+services:
+  prices:
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:prices
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD:
+      SPRING_DATASOURCE_DRIVER: org.h2.Driver
+      SPRING_JPA_DIALECT: org.hibernate.dialect.H2Dialect

@@ -1,0 +1,117 @@
+openapi: 3.0.0
+info:
+  title: Prices API
+  version: 1.0.0
+  description: API para consultar precios de productos
+
+servers:
+  - url: https://inditex.com/v1
+
+paths:
+  /prices:
+    get:
+      summary: Consultar precio de un producto
+      description: Devuelve el precio aplicable a un producto en una fecha específica para una cadena determinada
+      operationId: getPrice
+      parameters:
+        - name: date
+          in: query
+          required: true
+          description: Fecha de aplicación
+          schema:
+            type: string
+            format: date-time
+        - name: productId
+          in: query
+          required: true
+          description: Identificador del producto
+          schema:
+            type: integer
+        - name: brandId
+          in: query
+          required: true
+          description: Identificador de la cadena
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Precio encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '404':
+          description: Precio no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Parámetros de entrada inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    PriceResponse:
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: Identificador del producto
+        brandId:
+          type: integer
+          description: Identificador de la cadena
+        priceList:
+          type: integer
+          description: Identificador de la tarifa de precios aplicable
+        startDate:
+          type: string
+          format: date-time
+          description: Fecha de inicio de aplicación del precio
+        endDate:
+          type: string
+          format: date-time
+          description: Fecha de fin de aplicación del precio
+        price:
+          type: number
+          format: double
+          description: Precio final a aplicar
+        currency:
+          type: string
+          description: Moneda del precio
+      required:
+        - productId
+        - brandId
+        - priceList
+        - startDate
+        - endDate
+        - price
+        - currency
+
+    ErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          description: URI de referencia que identifica el tipo de problema
+        title:
+          type: string
+          description: Resumen breve del problema
+        status:
+          type: integer
+          description: Código de estado HTTP
+        detail:
+          type: string
+          description: Explicación del error
+        instance:
+          type: string
+          description: URI que identifica la ocurrencia específica del error
+      required:
+        - type
+        - title
+        - status
+        - detail
+        - instance
