@@ -55,9 +55,10 @@ class PricesControllerIntegrationTest {
             "2020-06-15T10:00:00.000Z, 3, 30.5",
             "2020-06-16T21:00:00.000Z, 4, 38.95"
     })
-    void getPrice(OffsetDateTime date, Integer priceList, Double price) {
+    void getPrice(String date, Integer priceList, Double price) {
+
         // when
-        var response = client.getForEntity(createUri(date.toString()), PriceResponse.class);
+        var response = client.getForEntity(createUri(date), PriceResponse.class);
 
         // then
         assertAll(
